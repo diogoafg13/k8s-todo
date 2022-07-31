@@ -7,15 +7,18 @@ import com.dgtech.k8s.todo.model.Item;
 import com.dgtech.k8s.todo.repo.ItemRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@Component
 public class ToDoDAOImpl implements ToDoDAO{
 
-    private ItemRepo itemRepo;
+    private final ItemRepo itemRepo;
 
     @Autowired
     public ToDoDAOImpl(ItemRepo itemRepo){
@@ -29,7 +32,7 @@ public class ToDoDAOImpl implements ToDoDAO{
         itemToSave.setDate(LocalDate.now());
         log.info("Item entity mapped: {} and will save in database", itemToSave);
         Item itemSaved = itemRepo.save(itemToSave);
-        log.info("Item saved in database {}", itemSaved.toString());
+        log.info("Item saved in database {}", itemSaved);
 
         return ToDoMapper.INSTANCE.toToDoItems(itemSaved);
     }
@@ -39,16 +42,17 @@ public class ToDoDAOImpl implements ToDoDAO{
         log.info("Search for item with id {}", id);
         Optional<Item> optItemToPatch = itemRepo.findById(id);
 
-        if(!optItemToPatch.isPresent()){
+        if(optItemToPatch.isEmpty()){
             log.info("No item found for id {}", id);
             return null;
         }
 
         log.info("Map patch item to Entity");
-        Item itemToPatch = ToDoMapper.INSTANCE.mergeItem(optItemToPatch.get());
+        Item itemToPatch = ToDoMapper.INSTANCE.mergeItem(optItemToPatch.get(), patchItem);
+        itemToPatch.setUpdateDate(LocalDateTime.now());
         log.info("Item entity mapped: {} and will patched in database", itemToPatch);
         Item itemPatched = itemRepo.save(itemToPatch);
-        log.info("Item patched in database {}", itemPatched.toString());
+        log.info("Item patched in database {}", itemPatched);
 
         return ToDoMapper.INSTANCE.toToDoItems(itemPatched);
     }
@@ -58,7 +62,7 @@ public class ToDoDAOImpl implements ToDoDAO{
         log.info("Search for item with id {}", id);
         Optional<Item> itemFound = itemRepo.findById(id);
 
-        if(!itemFound.isPresent()){
+        if(itemFound.isEmpty()){
             log.info("No item found for id {}", id);
         }
 
@@ -70,12 +74,12 @@ public class ToDoDAOImpl implements ToDoDAO{
         log.info("Search for item with id {}", id);
         Optional<Item> itemFound = itemRepo.findById(id);
 
-        if(!itemFound.isPresent()){
+        if(itemFound.isEmpty()){
             log.info("No item found for id {}", id);
             return null;
         }
 
-        log.info("Item found {}", itemFound.get().toString());
+        log.info("Item found {}", itemFound.get());
         return ToDoMapper.INSTANCE.toToDoItems(itemFound.get());
 
     }
@@ -84,7 +88,7 @@ public class ToDoDAOImpl implements ToDoDAO{
     public ToDo getAllItems() {
         log.info("Get all Items");
         List<Item> itemsFound = itemRepo.findAll();
-        log.info("{} items found in database");
+        log.info("{} items found in database", itemsFound.size());
 
         return ToDo.builder().items(ToDoMapper.INSTANCE.toToDo(itemsFound)).build();
     }

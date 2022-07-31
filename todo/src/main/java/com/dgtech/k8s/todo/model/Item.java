@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Document(ToDoProperties.MONGO_ITEM_DOC)
 @Data
@@ -17,4 +18,5 @@ public class Item {
     private String name;
     private LocalDate date;
     private String priority;
+    private LocalDateTime updateDate;
 }

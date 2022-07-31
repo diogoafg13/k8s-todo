@@ -17,5 +17,10 @@ public interface ToDoMapper {
     Item toItem(ToDoItems item);
     ToDoItems toToDoItems(Item item);
     List<ToDoItems> toToDo(List<Item> itemsList);
-    Item mergeItem(Item item);
+    @Mapping(source = "itemToDo.name", target = "name")
+    @Mapping(source = "itemToDo.priority", target = "priority")
+    @Mapping(source = "item.date", target = "date")
+    @Mapping(source = "item.id", target = "id")
+    @Mapping(source = "itemToDo.updateDate", target = "updateDate")
+    Item mergeItem(Item item, ToDoItems itemToDo);
 }

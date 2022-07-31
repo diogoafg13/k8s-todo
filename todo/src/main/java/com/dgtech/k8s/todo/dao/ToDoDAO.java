@@ -2,9 +2,8 @@ package com.dgtech.k8s.todo.dao;
 
 import com.dgtech.k8s.todo.dto.ToDo;
 import com.dgtech.k8s.todo.dto.ToDoItems;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
 public interface ToDoDAO {
 
     public ToDoItems createItem(ToDoItems createItem);

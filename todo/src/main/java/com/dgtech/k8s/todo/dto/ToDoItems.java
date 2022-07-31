@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 public class ToDoItems {
 
+    private String id;
     private String name;
     private LocalDate date;
     private ToDoPriority priority;

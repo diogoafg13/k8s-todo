@@ -4,10 +4,13 @@ import lombok.*;
 
 @NoArgsConstructor
 @Getter
+@AllArgsConstructor
 public enum ToDoPriority {
 
-    LOW,
-    NORMAL,
-    HIGH
+    LOW("LOW"),
+    NORMAL("NORMAL"),
+    HIGH("HIGH");
+
+    private String priority;
 
 }

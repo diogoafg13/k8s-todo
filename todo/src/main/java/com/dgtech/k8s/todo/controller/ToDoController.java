@@ -16,6 +16,7 @@ public class ToDoController implements ToDoApiResource {
 
     private ToDoDAO dao;
 
+    @Autowired
     public void ToDoController(ToDoDAO dao){
         this.dao = dao;
     }
